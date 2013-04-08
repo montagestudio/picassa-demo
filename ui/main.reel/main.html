@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Main</title>
+
+    <link rel="stylesheet" type="text/css" href="main.css">
+
+    <script type="text/montage-serialization">
+        {
+            "owner": {
+                "properties": {
+                    "element": {"#": "main"}
+                }
+            },
+
+            "picassaController": {
+                "prototype": "core/picassa-controller",
+                "bindings": {
+                    "searchTerm": {"<-": "@searchTermInput.value"}
+                }
+            },
+
+            "photoListController": {
+                "prototype": "montage/core/range-controller",
+                "bindings": {
+                    "content": {"<-": "@picassaController.photos"}
+                }
+            },
+
+            "searchTermInput": {
+                "prototype": "matte/ui/input-text.reel",
+                "properties": {
+                    "element": {"#": "searchTermInput"}
+                }
+            },
+
+            "photoList": {
+                "prototype": "montage/ui/repetition.reel",
+                "properties": {
+                    "element": {"#": "photoList"},
+                    "isSelectionEnabled": true,
+                    "contentController": {"@": "photoListController"}
+                }
+            },
+
+            "thumbnail": {
+                "prototype": "matte/ui/image.reel",
+                "properties": {
+                    "element": {"#": "thumbnail"}
+                },
+                "bindings": {
+                    "src": {"<-": "@photoList.objectAtCurrentIteration['media$group']['media$thumbnail'].0.url || '' "}
+                }
+            },
+
+            "photoViewer": {
+                "prototype": "matte/ui/image.reel",
+                "properties": {
+                    "element": {"#": "photoViewer"}
+                },
+                "bindings": {
+                    "src": {"<-": "@photoListController.selection.0.content.src || '' "}
+                }
+            },
+
+            "title": {
+                "prototype": "montage/ui/text.reel",
+                "properties": {
+                    "element": {"#": "title"}
+                },
+                "bindings": {
+                    "value": {"<-": "@photoListController.selection.0.title['$t']"}
+                }
+            },
+
+            "author": {
+                "prototype": "montage/ui/text.reel",
+                "properties": {
+                    "element": {"#": "author"}
+                },
+                "bindings": {
+                    "value": {"<-": "@photoListController.selection.0.author.0.name['$t']"}
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <div data-montage-id="main" class="Main">
+        <nav>
+            <input type="text" data-montage-id="searchTermInput">
+            <ul data-montage-id="photoList">
+                <li>
+                    <img data-montage-id="thumbnail">
+                </li>
+            </ul>
+         </nav>
+        <section>
+                <img data-montage-id="photoViewer">
+                Title <span data-montage-id="title"></span>
+                Author <span data-montage-id="author"></span>
+        </section>
+    </div>
+</body>
+</html>
